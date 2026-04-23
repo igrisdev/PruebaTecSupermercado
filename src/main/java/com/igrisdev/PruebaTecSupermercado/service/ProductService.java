@@ -6,9 +6,11 @@ import com.igrisdev.PruebaTecSupermercado.mapper.Mapper;
 import com.igrisdev.PruebaTecSupermercado.model.Producto;
 import com.igrisdev.PruebaTecSupermercado.repository.ProductoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class ProductService implements IProductoService {
 
     @Autowired
@@ -46,7 +48,7 @@ public class ProductService implements IProductoService {
 
     @Override
     public void eliminarProducto(Long id) {
-        if (repo.existsById(id)) throw new NotFoundException("Producto no encontrado para eliminar");
+        if (!repo.existsById(id)) throw new NotFoundException("Producto no encontrado para eliminar");
 
         repo.deleteById(id);
     }

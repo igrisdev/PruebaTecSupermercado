@@ -12,6 +12,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/ventas")
 public class VentaController {
+
     @Autowired
     private IVentaService ventaService;
 

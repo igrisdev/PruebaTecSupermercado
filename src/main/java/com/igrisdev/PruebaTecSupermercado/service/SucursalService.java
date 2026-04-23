@@ -6,9 +6,11 @@ import com.igrisdev.PruebaTecSupermercado.mapper.Mapper;
 import com.igrisdev.PruebaTecSupermercado.model.Sucursal;
 import com.igrisdev.PruebaTecSupermercado.repository.SucursalRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class SucursalService implements ISucursalService {
 
     @Autowired
@@ -42,7 +44,7 @@ public class SucursalService implements ISucursalService {
 
     @Override
     public void eliminarSucursal(Long id) {
-        if (repo.existsById(id))
+        if (!repo.existsById(id))
             throw new NotFoundException("Sucursal no encontrada");
 
         repo.deleteById(id);

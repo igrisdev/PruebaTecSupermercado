@@ -13,10 +13,12 @@ import com.igrisdev.PruebaTecSupermercado.repository.ProductoRepository;
 import com.igrisdev.PruebaTecSupermercado.repository.SucursalRepository;
 import com.igrisdev.PruebaTecSupermercado.repository.VentaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class VentaService implements IVentaService {
 
     @Autowired
@@ -32,12 +34,12 @@ public class VentaService implements IVentaService {
         List<VentaDTO> ventasDto = new ArrayList<>();
 
         VentaDTO dto;
-
         for (Venta v : ventas) {
             dto = Mapper.toDTO(v);
             ventasDto.add(dto);
         }
 
+        return ventasDto;
     }
 
     @Override
@@ -62,6 +64,7 @@ public class VentaService implements IVentaService {
 
         // lista de detalles
         List<DetalleVenta> detalles = new ArrayList<>();
+        Double totalCalculado = 0.0;
 
         for (DetalleVentaDTO detDTO : ventaDto.getDetalle()) {
             Producto p = productoRepo.findByNombre(detDTO.getNombreProd()).orElse(null);
@@ -77,16 +80,18 @@ public class VentaService implements IVentaService {
             detalleVenta.setVenta(vent);
 
             detalles.add(detalleVenta);
+            totalCalculado = totalCalculado + (detDTO.getPrecio() * detDTO.getCantProd());
         }
 
         // seteamos la lista de detalle venta
         vent.setDetalle(detalles);
 
         // guardamos en db
-        ventaRepo.save(vent);
+        vent = ventaRepo.save(vent);
 
         // mapeo de salida
         VentaDTO ventaSalida = Mapper.toDTO(vent);
+
         return ventaSalida;
     }
 
